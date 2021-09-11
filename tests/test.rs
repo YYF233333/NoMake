@@ -36,3 +36,15 @@ fn static_lib() {
     compile(sources, args);
     fs::remove_file("static.a").unwrap();
 }
+
+#[test]
+fn release() {
+    let args = Args {
+        lib: OutType::Binary,
+        release: true,
+        output: String::from("release.out"),
+    };
+    let sources = collect_source();
+    compile(sources, args);
+    fs::remove_file("release.out").unwrap();
+}

@@ -14,7 +14,11 @@ pub fn collect_source() -> Vec<DirEntry> {
 pub fn compile(sources: Vec<DirEntry>, args: Args) {
     fs::create_dir_all("bin").unwrap();
 
-    let objects: Vec<String> = sources.into_iter().map(to_object).collect();
+    let mut objects = Vec::with_capacity(sources.len());
+
+    for source in sources {
+        objects.push(to_object(source, args.release));
+    }
 
     let mut command = match args.lib {
         OutType::Binary => link_binary(objects, &args.output),
@@ -45,12 +49,13 @@ fn collect_file<P: AsRef<Path>>(root: P, filter: fn(file_name: &str) -> bool) ->
 }
 
 // compile a .c source file, place the .o object file in folder "bin"
-fn to_object(source: DirEntry) -> String {
+fn to_object(source: DirEntry, release: bool) -> String {
     let name = source.file_name().to_str().unwrap();
     let name = name.strip_suffix(".c").unwrap();
     println!("compiling {}", name);
     let mut command = Command::new("gcc")
         .arg("-c")
+        .arg(if release {"-O2"} else {"-Og"})
         .arg("-o")
         .arg(format!("./bin/{}.o", name))
         .arg(source.path())

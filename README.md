@@ -15,9 +15,9 @@ though it won't reuse them in current version:(
 
 parameters:
 ```bash
--l <lib>           compile with library rules, value could be "static" or "shared"
--o <output>        specify output file
+    --release            Activate release mode
+    --lib <lib>          Compile with library rules, value could be "static" or "shared" [default: binary]
+-o, --output <output>    Specify output file [default: a.out]
 ```
-TODO: Add debug/release mode choice
 
 TODO: Add ignore file function(something like .gitignore)

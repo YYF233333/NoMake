@@ -14,7 +14,7 @@ pub struct Args {
     #[structopt(long, parse(from_str = parse_arg_lib), default_value = "binary")]
     pub lib: OutType,
     /// Activate release mode
-    #[structopt(short, long)]
+    #[structopt(long)]
     pub release: bool,
     /// Specify output file
     #[structopt(short, long, parse(from_str), default_value = "a.out")]

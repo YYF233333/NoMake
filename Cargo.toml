@@ -1,6 +1,6 @@
 [package]
 name = "nomake"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Yufeng Ying<nbyyf2002@mail.ustc.edu.cn>"]
 edition = "2018"
 description = "simple C project manage tool."
