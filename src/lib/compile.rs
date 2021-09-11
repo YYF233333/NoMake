@@ -5,26 +5,21 @@ use std::{
 };
 use walkdir::{DirEntry, WalkDir};
 
-#[derive(PartialEq)]
-pub enum OutType {
-    Binary,
-    Static,
-    Shared,
-}
+use super::args::*;
 
 pub fn collect_source() -> Vec<DirEntry> {
     collect_file(env::current_dir().unwrap(), |name| name.ends_with(".c"))
 }
 
-pub fn compile(sources: Vec<DirEntry>, filename: &str, outtype: OutType) {
+pub fn compile(sources: Vec<DirEntry>, args: Args) {
     fs::create_dir_all("bin").unwrap();
 
     let objects: Vec<String> = sources.into_iter().map(to_object).collect();
 
-    let mut command = match outtype {
-        OutType::Binary => link_binary(objects, filename),
-        OutType::Shared => link_shared(objects, filename),
-        OutType::Static => link_static(objects, filename),
+    let mut command = match args.lib {
+        OutType::Binary => link_binary(objects, &args.output),
+        OutType::Shared => link_shared(objects, &args.output),
+        OutType::Static => link_static(objects, &args.output),
     };
 
     if !command.wait().unwrap().success() {
